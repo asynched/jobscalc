@@ -1,0 +1,83 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap");
+
+:root {
+  --white: #fff;
+  --purple: #41414c;
+  --grey: #e1e3e5;
+  --green: #36b236;
+  --orange: #f1972c;
+  --red: #eb3b35;
+
+  --light-red: #faeceb;
+  --light-green: #e8f8e8;
+
+  --heading: #5a5a66;
+  --text: #787880;
+  --complement: #bfbfcc;
+
+  --background: #f0f2f5;
+  --border: #e1e3e5;
+
+  --transition: 250ms ease-in-out;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+
+@media (max-width: 1080px) {
+  html {
+    font-size: 93.75%;
+  }
+}
+
+@media (max-width: 720px) {
+  html {
+    font-size: 87.5%;
+  }
+}
+
+@media (max-width: 600px) {
+  html {
+    font-size: 81.25%;
+  }
+}
+
+html,
+body {
+  background: var(--background);
+
+  color: var(--text);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+b {
+  font-weight: 600;
+}
+
+button {
+  cursor: pointer;
+}
+
+.cols-2 {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, 1fr);
+}
