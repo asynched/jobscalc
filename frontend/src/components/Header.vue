@@ -41,153 +41,155 @@
 </template>
 
 <script>
-  import { ref, onBeforeMount } from "vue";
-  import { PlusIcon } from "@heroicons/vue/outline";
-  import { getProfileData, getJobsInfo } from "@/helpers/requests";
+import { ref, onBeforeMount } from 'vue'
+import { PlusIcon } from '@heroicons/vue/outline'
+import { getProfileData, getJobsInfo } from '@/helpers/requests'
 
-  export default {
-    name: "Header",
+export default {
+  name: 'Header',
+  emits: ['fetchedData'],
+  setup(_, context) {
+    const profile = ref({
+      name: '',
+      image_url: '',
+    })
 
-    setup() {
-      const profile = ref({
-        name: "",
-        image_url: "",
-      });
+    const projects = ref({
+      total: 0,
+      in_progress: 0,
+      finished: 0,
+    })
 
-      const projects = ref({
-        total: 0,
-        in_progress: 0,
-        finished: 0,
-      });
+    onBeforeMount(async () => {
+      const [profileData, projectsData] = await Promise.all([
+        getProfileData(),
+        getJobsInfo(),
+      ])
 
-      onBeforeMount(async () => {
-        const [profileData, projectsData] = await Promise.all([
-          getProfileData(),
-          getJobsInfo(),
-        ]);
+      profile.value = profileData
+      projects.value = projectsData
 
-        profile.value = profileData;
-        projects.value = projectsData;
-      });
+      context.emit('fetchedData')
+    })
 
-      return {
-        profile,
-        projects,
-      };
-    },
-    components: {
-      PlusIcon,
-    },
-  };
+    return {
+      profile,
+      projects,
+    }
+  },
+  components: {
+    PlusIcon,
+  },
+}
 </script>
 
 <style lang="scss" scoped>
-  header {
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  color: var(--white);
+  background: var(--purple);
+
+  .upper,
+  .lower {
+    max-width: 70rem;
+    width: 90%;
     display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: space-between;
+  }
 
-    color: var(--white);
-    background: var(--purple);
+  .upper {
+    padding: 1rem 0;
 
-    .upper,
-    .lower {
-      max-width: 70rem;
-      width: 90%;
+    .profile-info {
       display: flex;
+      gap: 1rem;
       align-items: center;
-      justify-content: space-between;
-    }
-
-    .upper {
-      padding: 1rem 0;
-
-      .profile-info {
-        display: flex;
-        gap: 1rem;
-        align-items: center;
-
-        a {
-          font-size: 0.9rem;
-          color: var(--complement);
-
-          &:hover {
-            color: var(--orange);
-          }
-        }
-
-        b {
-          font-size: 1.25rem;
-        }
-
-        img {
-          width: 4rem;
-          height: 4rem;
-
-          object-fit: cover;
-
-          border: 2px solid var(--orange);
-          border-radius: 50%;
-        }
-      }
-    }
-
-    .lower {
-      padding: 0.5rem 0 5rem 0;
-
-      & > div {
-        display: flex;
-        align-items: center;
-        gap: 2rem;
-
-        & p {
-          color: var(--complement);
-        }
-      }
 
       a {
-        text-decoration: none;
-        padding: 0.75rem 1rem;
-
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-
-        border: none;
-        border-radius: 0.5rem;
-
-        color: var(--white);
-
-        background: var(--orange);
-
-        transition: var(--transition);
-
-        div {
-          width: 2rem;
-          height: 2rem;
-
-          background: rgba(255, 255, 255, 0.15);
-          display: grid;
-
-          place-items: center;
-
-          border-radius: 0.25rem;
-
-          svg {
-            width: 1rem;
-          }
-        }
-
-        span {
-          font-weight: 600;
-          letter-spacing: 1px;
-          text-transform: uppercase;
-        }
+        font-size: 0.9rem;
+        color: var(--complement);
 
         &:hover {
-          filter: brightness(1.1);
+          color: var(--orange);
         }
+      }
+
+      b {
+        font-size: 1.25rem;
+      }
+
+      img {
+        width: 4rem;
+        height: 4rem;
+
+        object-fit: cover;
+
+        border: 2px solid var(--orange);
+        border-radius: 50%;
       }
     }
   }
+
+  .lower {
+    padding: 0.5rem 0 5rem 0;
+
+    & > div {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+
+      & p {
+        color: var(--complement);
+      }
+    }
+
+    a {
+      text-decoration: none;
+      padding: 0.75rem 1rem;
+
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      border: none;
+      border-radius: 0.5rem;
+
+      color: var(--white);
+
+      background: var(--orange);
+
+      transition: var(--transition);
+
+      div {
+        width: 2rem;
+        height: 2rem;
+
+        background: rgba(255, 255, 255, 0.15);
+        display: grid;
+
+        place-items: center;
+
+        border-radius: 0.25rem;
+
+        svg {
+          width: 1rem;
+        }
+      }
+
+      span {
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+
+      &:hover {
+        filter: brightness(1.1);
+      }
+    }
+  }
+}
 </style>

@@ -2,7 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    BaseUserManager,
+    PermissionsMixin,
+)
 from core.helpers import calculate_default_date
 
 
@@ -22,10 +26,7 @@ class CustomAccountManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, password=None):
-        user = self.create_user(
-            email=self.normalize_email(email),
-            password=password
-        )
+        user = self.create_user(email=self.normalize_email(email), password=password)
 
         user.is_staff = True
         user.is_admin = True
@@ -42,8 +43,12 @@ class Profile(AbstractBaseUser, PermissionsMixin):
 
     # Optional fields
     name = models.CharField(max_length=255, null=True, blank=True)
-    image_url = models.URLField(max_length=255, null=True, blank=True,
-                                default="https://scontent-gru1-2.xx.fbcdn.net/v/t1.30497-1/143086968_2856368904622192_1959732218791162458_n.png?_nc_cat=1&ccb=1-3&_nc_sid=7206a8&_nc_ohc=59lRIs-xu-gAX8xZlk0&tn=iEB9roOiVPhoqnVA&_nc_ht=scontent-gru1-2.xx&oh=31a3b67eabeee51497401a9e5771d920&oe=60DC1578")
+    image_url = models.URLField(
+        max_length=255,
+        null=True,
+        blank=True,
+        default="https://media.istockphoto.com/vectors/default-avatar-profile-icon-grey-photo-placeholder-hand-drawn-modern-vector-id1273297997?b=1&k=6&m=1273297997&s=612x612&w=0&h=W0mwZseX1YEUPH8BJ9ra2Y-VeaUOi0nSLfQJWExiLsQ=",
+    )
 
     # Required fields
     date_joined = models.DateTimeField(auto_now_add=True)
@@ -72,9 +77,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
 @receiver(post_save, sender=Profile)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        Planning.objects.create(
-            profile=instance
-        )
+        Planning.objects.create(profile=instance)
 
 
 @receiver(post_save, sender=User)
@@ -84,7 +87,8 @@ def save_user_profile(sender, instance, **kwargs):
 
 class Planning(models.Model):
     expected_montly_payment = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0)
+        max_digits=8, decimal_places=2, default=0
+    )
     daily_worktime = models.IntegerField(default=0)
     weekly_worktime = models.IntegerField(default=0)
     yearly_vacation_weeks = models.IntegerField(default=0)

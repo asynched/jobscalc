@@ -16,69 +16,69 @@
 </template>
 
 <script>
-  import { onBeforeMount } from "vue";
-  import { ArrowLeftIcon } from "@heroicons/vue/outline";
-  import { useRouter } from "vue-router";
-  import { setPageTitle } from "@/helpers/utils";
+import { onBeforeMount } from 'vue'
+import { ArrowLeftIcon } from '@heroicons/vue/outline'
+import { useRouter } from 'vue-router'
+import { setPageTitle } from '@/helpers/utils'
 
-  export default {
-    name: "BaseLayout",
-    setup(props) {
-      const router = useRouter();
+export default {
+  name: 'BaseLayout',
+  setup(props) {
+    const router = useRouter()
 
-      onBeforeMount(() => setPageTitle(props.pageName));
+    onBeforeMount(() => setPageTitle(props.pageName))
 
-      return {
-        router,
-        ...props,
-      };
-    },
-    props: ["pageName"],
-    components: {
-      ArrowLeftIcon,
-    },
-  };
+    return {
+      router,
+      ...props,
+    }
+  },
+  props: ['pageName'],
+  components: {
+    ArrowLeftIcon,
+  },
+}
 </script>
 
 <style lang="scss" scoped>
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    height: 4rem;
+  height: 4rem;
 
-    background: var(--purple);
+  background: var(--purple);
 
-    div {
-      padding: 1rem 0;
+  div {
+    padding: 1rem 0;
 
-      max-width: 70rem;
-      width: 90%;
-
-      display: flex;
-      justify-content: space-between;
-
-      color: var(--complement);
-
-      p.go-back:hover {
-        cursor: pointer;
-      }
-
-      svg {
-        width: 1rem;
-      }
-    }
-  }
-
-  main.base-layout-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  div.base-layout-wrapper {
     max-width: 70rem;
     width: 90%;
+
+    display: flex;
+    justify-content: space-between;
+
+    color: var(--complement);
+
+    p.go-back:hover {
+      cursor: pointer;
+    }
+
+    svg {
+      width: 1rem;
+    }
   }
+}
+
+main.base-layout-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+div.base-layout-wrapper {
+  max-width: 70rem;
+  width: 90%;
+}
 </style>

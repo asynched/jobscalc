@@ -1,5 +1,8 @@
 <template>
   <BaseLayout pageName="Meu perfil">
+    <modal-animation-wrapper>
+      <spinner-modal v-if="isLoading" />
+    </modal-animation-wrapper>
     <div class="wrapper">
       <!-- Perfil -->
       <div class="profile">
@@ -84,216 +87,224 @@
 </template>
 
 <script>
-  import { ref, computed, onBeforeMount } from "vue";
-  import {
-    getProfileData,
-    getPlanningData,
-    updateProfileData,
-    updatePlanningData,
-  } from "@/helpers/requests";
-  import { formatValue } from "@/helpers/format";
-  import { calculateHourlyValue } from "@/helpers/calculate";
-  import BaseLayout from "@/layouts/BaseLayout.vue";
-  import { useToast } from "vue-toastification";
-  import { useRouter } from "vue-router";
-  import { clearTokenFromLocalStorage } from "../helpers/local-storage";
+import { ref, computed, onBeforeMount } from 'vue'
+import {
+  getProfileData,
+  getPlanningData,
+  updateProfileData,
+  updatePlanningData,
+} from '@/helpers/requests'
+import { formatValue } from '@/helpers/format'
+import { calculateHourlyValue } from '@/helpers/calculate'
+import BaseLayout from '@/layouts/BaseLayout.vue'
+import { useToast } from 'vue-toastification'
+import { useRouter } from 'vue-router'
+import { clearTokenFromLocalStorage } from '../helpers/local-storage'
+import ModalAnimationWrapper from '@/components/ModalAnimationWrapper.vue'
+import SpinnerModal from '@/components/SpinnerModal.vue'
 
-  export default {
-    name: "Profile",
-    setup() {
-      const router = useRouter();
-      const toast = useToast();
+export default {
+  name: 'Profile',
+  setup() {
+    const router = useRouter()
+    const toast = useToast()
 
-      const profile = ref({
-        name: "",
-        image_url: "",
-      });
+    const isLoading = ref(true)
 
-      const planning = ref({
-        expected_montly_payment: 0,
-        daily_worktime: 0,
-        weekly_worktime: 0,
-        yearly_vacation_weeks: 0,
-        hourly_value: 0,
-      });
+    const profile = ref({
+      name: '',
+      image_url: '',
+    })
 
-      const showSuccessToast = () =>
-        toast.success("Dados atualizados com sucesso!");
-      const showErrorToast = () => toast.error("Erro ao atualizar dados");
+    const planning = ref({
+      expected_montly_payment: 0,
+      daily_worktime: 0,
+      weekly_worktime: 0,
+      yearly_vacation_weeks: 0,
+      hourly_value: 0,
+    })
 
-      const handleSubmit = async () => {
-        try {
-          await Promise.all([
-            updateProfileData(profile.value),
-            updatePlanningData(planning.value),
-          ]);
-          showSuccessToast();
-        } catch {
-          showErrorToast();
-        }
-      };
+    const showSuccessToast = () =>
+      toast.success('Dados atualizados com sucesso!')
+    const showErrorToast = () => toast.error('Erro ao atualizar dados')
 
-      const handleLogoff = () => {
-        clearTokenFromLocalStorage();
-        router.push({ path: "/" });
-      };
+    const handleSubmit = async () => {
+      try {
+        await Promise.all([
+          updateProfileData(profile.value),
+          updatePlanningData(planning.value),
+        ])
+        showSuccessToast()
+      } catch {
+        showErrorToast()
+      }
+    }
 
-      const hourly_value = computed(() =>
-        calculateHourlyValue(
-          +planning.value.expected_montly_payment,
-          +planning.value.daily_worktime,
-          +planning.value.weekly_worktime,
-          +planning.value.yearly_vacation_weeks
-        )
-      );
+    const handleLogoff = () => {
+      clearTokenFromLocalStorage()
+      router.push({ path: '/' })
+    }
 
-      onBeforeMount(async () => {
-        const [profileData, planningData] = await Promise.all([
-          getProfileData(),
-          getPlanningData(),
-        ]);
+    const hourly_value = computed(() =>
+      calculateHourlyValue(
+        +planning.value.expected_montly_payment,
+        +planning.value.daily_worktime,
+        +planning.value.weekly_worktime,
+        +planning.value.yearly_vacation_weeks
+      )
+    )
 
-        profile.value = profileData;
-        planning.value = planningData;
-      });
+    onBeforeMount(async () => {
+      const [profileData, planningData] = await Promise.all([
+        getProfileData(),
+        getPlanningData(),
+      ])
 
-      return {
-        handleLogoff,
-        handleSubmit,
-        formatValue,
-        planning,
-        hourly_value,
-        profile,
-      };
-    },
-    components: {
-      BaseLayout,
-    },
-  };
+      profile.value = profileData
+      planning.value = planningData
+      isLoading.value = false
+    })
+
+    return {
+      isLoading,
+      handleLogoff,
+      handleSubmit,
+      formatValue,
+      planning,
+      hourly_value,
+      profile,
+    }
+  },
+  components: {
+    BaseLayout,
+    ModalAnimationWrapper,
+    SpinnerModal,
+  },
+}
 </script>
 
 <style lang="scss" scoped>
-  .wrapper {
-    width: 100%;
-    height: calc(100vh - 4rem);
+.wrapper {
+  width: 100%;
+  height: calc(100vh - 4rem);
 
-    display: grid;
-    grid-template-columns: 2fr 4fr;
-    gap: 4rem;
+  display: grid;
+  grid-template-columns: 2fr 4fr;
+  gap: 4rem;
+}
+
+.info,
+.profile {
+  margin: 4rem 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  background: var(--white);
+
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+}
+
+.profile {
+  align-items: center;
+
+  & > * {
+    margin: 1rem 0;
   }
 
-  .info,
-  .profile {
-    margin: 4rem 0;
+  img {
+    height: 12rem;
+    width: 12rem;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    object-fit: cover;
+    background: var(--purple);
 
-    background: var(--white);
+    border: 2px solid var(--orange);
+    border-radius: 50%;
+  }
+
+  p {
+    font-size: 1.125rem;
+    text-align: center;
+  }
+
+  button {
+    padding: 0.75rem 0;
+
+    width: 14rem;
+
+    letter-spacing: 1px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--white);
+
+    border: none;
+    border-radius: 0.5rem;
+
+    background: var(--green);
+
+    transition: var(--transition);
+
+    &:hover {
+      filter: brightness(1.1);
+    }
+
+    &.logoff {
+      background: var(--red);
+    }
+  }
+}
+
+.info {
+  padding: 4rem;
+
+  section {
+    margin-bottom: 2rem;
+  }
+
+  hr {
+    margin: 1.5rem 0;
+
+    border: none;
+    border-top: 1px solid var(--border);
+  }
+
+  div {
+    margin-bottom: 1.5rem;
+
+    label p {
+      margin-bottom: 1rem;
+
+      font-size: 0.9rem;
+    }
+  }
+
+  input {
+    padding: 0.75rem 1.5rem;
+
+    width: 100%;
+
+    color: var(--text);
 
     border: 1px solid var(--border);
-    border-radius: 0.5rem;
-  }
+    border-radius: 0.25rem;
 
-  .profile {
-    align-items: center;
+    outline: none;
 
-    & > * {
-      margin: 1rem 0;
-    }
+    transition: var(--transition);
 
-    img {
-      height: 12rem;
-      width: 12rem;
-
-      object-fit: cover;
-      background: var(--purple);
-
-      border: 2px solid var(--orange);
-      border-radius: 50%;
-    }
-
-    p {
-      font-size: 1.125rem;
-      text-align: center;
-    }
-
-    button {
-      padding: 0.75rem 0;
-
-      width: 14rem;
-
-      letter-spacing: 1px;
-      font-weight: 600;
-      text-transform: uppercase;
-      color: var(--white);
-
-      border: none;
-      border-radius: 0.5rem;
-
-      background: var(--green);
-
-      transition: var(--transition);
-
-      &:hover {
-        filter: brightness(1.1);
-      }
-
-      &.logoff {
-        background: var(--red);
-      }
+    &:focus,
+    &:active {
+      box-shadow: 0 0 0 2px rgba(54, 178, 54, 1);
     }
   }
+}
 
-  .info {
-    padding: 4rem;
-
-    section {
-      margin-bottom: 2rem;
-    }
-
-    hr {
-      margin: 1.5rem 0;
-
-      border: none;
-      border-top: 1px solid var(--border);
-    }
-
-    div {
-      margin-bottom: 1.5rem;
-
-      label p {
-        margin-bottom: 1rem;
-
-        font-size: 0.9rem;
-      }
-    }
-
-    input {
-      padding: 0.75rem 1.5rem;
-
-      width: 100%;
-
-      color: var(--text);
-
-      border: 1px solid var(--border);
-      border-radius: 0.25rem;
-
-      outline: none;
-
-      transition: var(--transition);
-
-      &:focus,
-      &:active {
-        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.125);
-      }
-    }
-  }
-
-  .cols-2 {
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(2, 1fr);
-  }
+.cols-2 {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, 1fr);
+}
 </style>

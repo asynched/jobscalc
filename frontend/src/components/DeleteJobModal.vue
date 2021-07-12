@@ -16,97 +16,97 @@
 </template>
 
 <script>
-  import Modal from "@/components/Modal.vue";
-  import { TrashIcon } from "@heroicons/vue/outline";
-  import { useToast } from "vue-toastification";
-  import { deleteJob } from "@/helpers/requests";
+import Modal from '@/components/Modal.vue'
+import { TrashIcon } from '@heroicons/vue/outline'
+import { useToast } from 'vue-toastification'
+import { deleteJob } from '@/helpers/requests'
 
-  export default {
-    name: "DeleteJobModal",
-    setup(props, context) {
-      const toast = useToast();
+export default {
+  name: 'DeleteJobModal',
+  setup(props, context) {
+    const toast = useToast()
 
-      const showSuccessToast = () => toast.success("Job apagado com sucesso!");
-      const showErrorToast = () => toast.error("Erro ao apagar job!");
+    const showSuccessToast = () => toast.success('Job apagado com sucesso!')
+    const showErrorToast = () => toast.error('Erro ao apagar job!')
 
-      const closeModal = () => context.emit("close");
+    const closeModal = () => context.emit('close')
 
-      const handleDeleteClick = async () => {
-        try {
-          await deleteJob(props.jobId);
-          showSuccessToast();
-          closeModal();
-          context.emit("success");
-        } catch {
-          showErrorToast();
-        }
-      };
+    const handleDeleteClick = async () => {
+      try {
+        await deleteJob(props.jobId)
+        showSuccessToast()
+        closeModal()
+        context.emit('success')
+      } catch {
+        showErrorToast()
+      }
+    }
 
-      return {
-        props,
-        closeModal,
-        handleDeleteClick,
-      };
-    },
-    props: ["jobId"],
-    emits: ["close", "success"],
-    components: {
-      Modal,
-      TrashIcon,
-    },
-  };
+    return {
+      props,
+      closeModal,
+      handleDeleteClick,
+    }
+  },
+  props: ['jobId'],
+  emits: ['close', 'success'],
+  components: {
+    Modal,
+    TrashIcon,
+  },
+}
 </script>
 
 <style lang="scss" scoped>
-  div.content {
-    padding: 2rem;
+div.content {
+  padding: 2rem;
 
-    max-width: 30rem;
-    width: 90%;
+  max-width: 30rem;
+  width: 90%;
 
-    text-align: center;
+  text-align: center;
 
-    background: var(--white);
+  background: var(--white);
 
-    border-radius: 0.5rem;
+  border-radius: 0.5rem;
 
-    box-shadow: 0 0 2rem rgba(32, 32, 32, 0.125);
+  box-shadow: 0 0 2rem rgba(32, 32, 32, 0.125);
 
-    h1,
-    svg,
-    p {
-      margin-bottom: 1.5rem;
-    }
+  h1,
+  svg,
+  p {
+    margin-bottom: 1.5rem;
+  }
 
-    svg {
-      width: 5rem;
-    }
+  svg {
+    width: 5rem;
+  }
 
-    div {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-      margin-top: 2.5rem;
+  div {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 2.5rem;
 
-      button {
-        padding: 1rem;
+    button {
+      padding: 1rem;
 
-        border: none;
-        border-radius: 0.5rem;
+      border: none;
+      border-radius: 0.5rem;
 
-        letter-spacing: 1px;
-        text-transform: uppercase;
+      letter-spacing: 1px;
+      text-transform: uppercase;
 
-        &.cancel {
-          color: var(--text);
-          background: var(--grey);
-        }
+      &.cancel {
+        color: var(--text);
+        background: var(--grey);
+      }
 
-        &.delete {
-          color: var(--white);
-          background: var(--red);
-        }
+      &.delete {
+        color: var(--white);
+        background: var(--red);
       }
     }
   }
+}
 </style>

@@ -6,7 +6,8 @@ from core.models import Profile
 class ProfileCreationForm(forms.ModelForm):
     password1 = forms.CharField(label="Password", widget=forms.PasswordInput)
     password2 = forms.CharField(
-        label="Password confirmation", widget=forms.PasswordInput)
+        label="Password confirmation", widget=forms.PasswordInput
+    )
 
     class Meta:
         model = Profile
@@ -33,6 +34,7 @@ class ProfileChangeForm(forms.ModelForm):
     the user, but replaces the password field with admin"s
     password hash display field.
     """
+
     password = ReadOnlyPasswordHashField()
 
     class Meta:

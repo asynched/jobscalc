@@ -1,0 +1,16 @@
+# Frontend
+**/node_modules
+**/dist
+**/dist-ssr
+.DS_Store
+*.local
+
+# Backend
+**/venv
+**/__pycache__
+**/staticfiles
+*.sqlite3
+*.env
+
+# General
+**/.vscode

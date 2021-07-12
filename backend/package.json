@@ -1,0 +1,18 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "src/manage.py",
+  "author": "Nxrth-x",
+  "license": "MIT",
+  "scripts": {
+    "dev": "python src/manage.py runserver",
+    "start": "gunicorn -w 2 --chdir src/ config.wsgi",
+    "test": "python src/manage.py test src/",
+    "create:app": "python src/manage.py startapp",
+    "create:project": "python src/manage.py startproject",
+    "create:admin": "python src/manage.py createsuperuser",
+    "migration:revert": "python src/manage.py migrate",
+    "migration:make": "python src/manage.py makemigrations",
+    "migration:run": "python src/manage.py migrate"
+  }
+}

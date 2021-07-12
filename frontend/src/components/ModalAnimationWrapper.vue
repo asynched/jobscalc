@@ -5,19 +5,19 @@
 </template>
 
 <script>
-  export default {
-    name: "ModalAnimationWrapper",
-  };
+export default {
+  name: 'ModalAnimationWrapper',
+}
 </script>
 
 <style lang="scss" scoped>
-  .display-enter-active,
-  .display-leave-active {
-    transition: opacity 0.5s ease;
-  }
+.display-enter-active,
+.display-leave-active {
+  transition: opacity 0.5s ease;
+}
 
-  .display-enter-from,
-  .display-leave-to {
-    opacity: 0;
-  }
+.display-enter-from,
+.display-leave-to {
+  opacity: 0;
+}
 </style>

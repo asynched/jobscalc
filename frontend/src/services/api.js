@@ -1,25 +1,25 @@
-import axios from "axios";
-import { getTokenFromLocalStorage } from "../helpers/local-storage";
+import axios from 'axios'
+import { getTokenFromLocalStorage } from '../helpers/local-storage'
 
 const makeAuthorizationHeaders = (token = getTokenFromLocalStorage()) => {
   if (token) {
     return {
       Authorization: `Bearer ${token}`,
-    };
+    }
   }
 
-  return {};
-};
+  return {}
+}
 
 const API = axios.create({
-  baseURL: "http://localhost:8000/api/",
+  baseURL: 'http://localhost:8000/api/',
   headers: {
     ...makeAuthorizationHeaders(),
   },
-});
+})
 
 export const setAuthorizationheaders = (token = getTokenFromLocalStorage()) => {
-  API.defaults.headers["Authorization"] = `Bearer ${token}`;
-};
+  API.defaults.headers['Authorization'] = `Bearer ${token}`
+}
 
-export default API;
+export default API

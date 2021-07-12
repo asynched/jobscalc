@@ -13,23 +13,26 @@ class ProfileAdmin(UserAdmin):
     add_form = ProfileCreationForm
     form = ProfileChangeForm
 
-    list_display = ('email', 'name', 'date_joined', 'is_admin')
-    list_filter = ('is_admin',)
+    list_display = ("email", "name", "date_joined", "is_admin")
+    list_filter = ("is_admin",)
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
-        ('Personal info', {'fields': ('name',)}),
-        ('Permissions', {'fields': ('is_admin',)}),
+        (None, {"fields": ("email", "password")}),
+        ("Personal info", {"fields": ("name",)}),
+        ("Permissions", {"fields": ("is_admin",)}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
     add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('email', 'name', 'password1', 'password2')}
-         ),
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": ("email", "name", "password1", "password2"),
+            },
+        ),
     )
-    search_fields = ('email',)
-    ordering = ('email',)
+    search_fields = ("email",)
+    ordering = ("email",)
     filter_horizontal = ()
 
 

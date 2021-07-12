@@ -7,25 +7,25 @@
 </template>
 
 <script>
-  export default {
-    name: "Modal",
-  };
+export default {
+  name: 'Modal',
+}
 </script>
 
 <style lang="scss" scoped>
-  div.modal-content-wrapper {
-    width: 100vw;
-    height: 100vh;
+div.modal-content-wrapper {
+  width: 100vw;
+  height: 100vh;
 
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 10;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
 
-    display: grid;
-    place-items: center;
+  display: grid;
+  place-items: center;
 
-    background: rgba(65, 65, 76, 0.75);
-    backdrop-filter: blur(2px);
-  }
+  background: rgba(65, 65, 76, 0.75);
+  backdrop-filter: blur(4px);
+}
 </style>

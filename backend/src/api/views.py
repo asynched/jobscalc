@@ -2,7 +2,13 @@ from rest_framework import generics, viewsets, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from api.serializers import JobSerializer, PlanningSerializer, ProfileSerializer, RegisterSerializer
+from api.serializers import (
+    JobSerializer,
+    PlanningSerializer,
+    ProfileSerializer,
+    RegisterSerializer,
+)
+
 from core.models import Job, Planning, Profile
 
 
@@ -21,18 +27,25 @@ class JobViewset(viewsets.ModelViewSet):
     def perform_create(self, serializer: JobSerializer):
         profile: Profile = self.request.user
 
-        price = profile.planning.hourly_value * \
-            serializer.validated_data["estimated_completion_time"]
+        price = (
+            profile.planning.hourly_value
+            * serializer.validated_data["estimated_completion_time"]
+        )
 
         serializer.save(profile=profile, price=price)
 
-    @action(methods=["get"], permission_classes=[permissions.IsAuthenticated], detail=False, url_path="data", url_name="jobs_data")
+    @action(
+        methods=["get"],
+        permission_classes=[permissions.IsAuthenticated],
+        detail=False,
+        url_path="data",
+        url_name="jobs_data",
+    )
     def get_jobs_info(self, request):
         profile = self.request.user
 
         total = Job.objects.filter(profile=profile).count()
-        in_progress = Job.objects.filter(
-            profile=profile, finished=False).count()
+        in_progress = Job.objects.filter(profile=profile, finished=False).count()
         finished = Job.objects.filter(profile=profile, finished=True).count()
 
         response_data = {

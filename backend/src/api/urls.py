@@ -1,7 +1,12 @@
 from django.urls.conf import include, path
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import JobViewset, PlanningRetrieveUpdateView, ProfileRetrieveUpdateView, RegisterView
+from .views import (
+    JobViewset,
+    PlanningRetrieveUpdateView,
+    ProfileRetrieveUpdateView,
+    RegisterView,
+)
 
 router = DefaultRouter()
 

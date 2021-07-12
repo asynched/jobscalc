@@ -7,19 +7,19 @@
 </template>
 
 <script>
-  export default {
-    name: "App",
-  };
+export default {
+  name: 'App',
+}
 </script>
 
 <style lang="scss">
-  .fade-enter,
-  .fade-leave-to {
-    opacity: 0;
-  }
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
 
-  .fade-enter-active,
-  .fade-leave-active {
-    transition: all 250ms ease-in-out;
-  }
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 250ms ease-in-out;
+}
 </style>

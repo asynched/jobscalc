@@ -47,19 +47,18 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
-        required=True,
-        validators=[UniqueValidator(queryset=Profile.objects.all())]
+        required=True, validators=[UniqueValidator(queryset=Profile.objects.all())]
     )
 
     password = serializers.CharField(
-        write_only=True, required=True, validators=[validate_password])
+        write_only=True, required=True, validators=[validate_password]
+    )
 
     class Meta:
         model = Profile
-        fields = ('password',
-                  'email', 'name')
+        fields = ("password", "email", "name")
         extra_kwargs = {
-            'name': {'required': True},
+            "name": {"required": True},
         }
 
     def validate(self, attrs):
@@ -67,11 +66,11 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         profile = Profile.objects.create(
-            email=validated_data['email'],
-            name=validated_data['name'],
+            email=validated_data["email"],
+            name=validated_data["name"],
         )
 
-        profile.set_password(validated_data['password'])
+        profile.set_password(validated_data["password"])
         profile.save()
 
         return profile

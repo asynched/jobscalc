@@ -1,16 +1,19 @@
 <template>
   <div>
-    <Header />
-    <ModalAnimationWrapper>
-      <DeleteJobModal
+    <Header @fetchedData="handleCloseSpinner" />
+    <modal-animation-wrapper>
+      <spinner-modal v-if="isLoading" />
+    </modal-animation-wrapper>
+    <modal-animation-wrapper>
+      <delete-job-modal
         v-if="showModal"
         :jobId="job"
         @close="showModal = false"
         @success="handleSuccessfullDelete"
       />
-    </ModalAnimationWrapper>
+    </modal-animation-wrapper>
     <div class="wrapper">
-      <JobCard
+      <job-card
         v-for="job in jobs"
         :key="job.id"
         :job="job"
@@ -21,57 +24,66 @@
 </template>
 
 <script>
-  import { ref, onBeforeMount } from "vue";
-  import { getListOfJobs } from "@/helpers/requests";
-  import Header from "@/components/Header.vue";
-  import JobCard from "@/components/JobCard.vue";
-  import DeleteJobModal from "@/components/DeleteJobModal.vue";
-  import ModalAnimationWrapper from "@/components/ModalAnimationWrapper.vue";
+import { ref, onBeforeMount } from 'vue'
+import { getListOfJobs } from '@/helpers/requests'
+import Header from '@/components/Header.vue'
+import JobCard from '@/components/JobCard.vue'
+import DeleteJobModal from '@/components/DeleteJobModal.vue'
+import ModalAnimationWrapper from '@/components/ModalAnimationWrapper.vue'
+import SpinnerModal from '@/components/SpinnerModal.vue'
 
-  export default {
-    name: "Dashboard",
-    setup() {
-      const jobs = ref([]);
-      const showModal = ref(false);
-      const job = ref(null);
+export default {
+  name: 'Dashboard',
+  setup() {
+    const jobs = ref([])
+    const showModal = ref(false)
+    const job = ref(null)
+    const isLoading = ref(true)
 
-      const fetchJobs = async () => {
-        const jobsData = await getListOfJobs();
-        jobs.value = jobsData;
-      };
+    const fetchJobs = async () => {
+      const jobsData = await getListOfJobs()
+      jobs.value = jobsData
+    }
 
-      const handleSuccessfullDelete = fetchJobs;
+    const handleCloseSpinner = () => {
+      isLoading.value = false
+    }
 
-      const handleDeleteClick = (jobId) => {
-        job.value = jobId;
-        showModal.value = true;
-      };
+    const handleSuccessfullDelete = fetchJobs
 
-      onBeforeMount(fetchJobs);
+    const handleDeleteClick = (jobId) => {
+      job.value = jobId
+      showModal.value = true
+    }
 
-      return {
-        job,
-        jobs,
-        handleDeleteClick,
-        handleSuccessfullDelete,
-        showModal,
-      };
-    },
+    onBeforeMount(fetchJobs)
 
-    components: {
-      Header,
-      JobCard,
-      DeleteJobModal,
-      ModalAnimationWrapper,
-    },
-  };
+    return {
+      job,
+      jobs,
+      isLoading,
+      handleCloseSpinner,
+      handleDeleteClick,
+      handleSuccessfullDelete,
+      showModal,
+    }
+  },
+
+  components: {
+    Header,
+    JobCard,
+    DeleteJobModal,
+    ModalAnimationWrapper,
+    SpinnerModal,
+  },
+}
 </script>
 
 <style lang="scss" scoped>
-  .wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: -4rem;
-  }
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -4rem;
+}
 </style>
